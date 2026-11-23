@@ -2,14 +2,12 @@ using MiniShop.Domain.Entities;
 
 namespace MiniShop.Data;
 
-// دیتابیس نداریم؛ برای تمرین، داده ها داخل آرایه های Static نگهداری می شوند.
 public static class StoreData
 {
     private static readonly List<Product> Products;
     private static readonly List<User> Users;
     private static readonly List<Order> Orders;
 
-    // Static Constructor فقط یک بار قبل از اولین استفاده از StoreData اجرا می شود.
     static StoreData()
     {
         Console.WriteLine("[StoreData] Static constructor called ONE time!");

@@ -6,8 +6,7 @@ namespace MiniShop.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
-
-    // این Service به جای ساخت UserService، آن را از Program دریافت می کند.
+    
     public AuthService(IUserService userService)
     {
         _userService = userService;
