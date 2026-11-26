@@ -12,7 +12,7 @@ public class ReportService : IReportService
         _orderService = orderService;
     }
 
-    public long GetTotalSales(User admin)
+    public long GetTotalSales(User? admin)
     {
         long total = 0;
 

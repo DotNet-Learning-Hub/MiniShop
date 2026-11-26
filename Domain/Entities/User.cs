@@ -4,7 +4,7 @@ namespace MiniShop.Domain.Entities;
 
 public class User
 {
-    private string _password;
+    public string Password { get; private set; }
 
     public int Id { get; }
     public string Username { get; }
@@ -16,14 +16,14 @@ public class User
         Id = id;
         Username = username;
         FullName = fullName;
-        _password = password;
+        Password = password;
         Role = role;
     }
 
     // رفتار مربوط به رمز همین کاربر، داخل خود Entity قرار گرفته.
     public bool CheckPassword(string password)
     {
-        return _password == password;
+        return Password == password;
     }
 
     public bool ChangePassword(string oldPassword, string newPassword)
@@ -34,7 +34,7 @@ public class User
         if (newPassword.Length < 4)
             return false;
 
-        _password = newPassword;
+        Password = newPassword;
         return true;
     }
 }

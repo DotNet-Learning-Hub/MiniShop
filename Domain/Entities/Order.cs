@@ -1,4 +1,5 @@
 using MiniShop.Domain.Enums;
+using Newtonsoft.Json;
 
 namespace MiniShop.Domain.Entities;
 
@@ -24,6 +25,20 @@ public class Order
         UnitPrice = product.GetFinalPrice();
         CreatedAt = DateTime.Now;
         Status = OrderStatus.Placed;
+    }
+
+    [JsonConstructor]
+    public Order(int id, int userId, int productId, string productName,
+        int quantity, int unitPrice, DateTime createdAt, OrderStatus status)
+    {
+        Id = id;
+        UserId = userId;
+        ProductId = productId;
+        ProductName = productName;
+        Quantity = quantity;
+        UnitPrice = unitPrice;
+        CreatedAt = createdAt;
+        Status = status;
     }
 
     public void Cancel()

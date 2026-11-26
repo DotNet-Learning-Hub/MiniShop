@@ -1,15 +1,23 @@
-using MiniShop.Data;
 using MiniShop.Domain.Entities;
 using MiniShop.Domain.Enums;
+using MiniShop.Repository.Contracts;
+using MiniShop.Repository.Implementations;
 using MiniShop.Services;
 using MiniShop.Services.Contracts;
 
 
 
-IUserService userService = new UserService();
-IAuthService authService = new AuthService(userService);
-IProductService productService = new ProductService();
-IOrderService orderService = new OrderService(productService);
+IUserRepository userRepository = new FileUserRepository("users.json");
+IProductRepository productRepository = new FileProductRepository(
+    "physical-products.json",
+    "digital-products.json");
+IOrderRepository orderRepository = new FileOrderRepository("orders.json");
+// Use InMemoryUserRepository, InMemoryProductRepository and
+// InMemoryOrderRepository when persistence is not needed.
+IUserService userService = new UserService(userRepository);
+IAuthService authService = new AuthService(userService, userRepository);
+IProductService productService = new ProductService(productRepository);
+IOrderService orderService = new OrderService(productRepository, orderRepository);
 IReportService reportService = new ReportService(orderService);
 
 Run();
@@ -32,7 +40,7 @@ void Login()
 {
     string username = ConsoleKit.ReadText("Username:");
     string password = ConsoleKit.ReadText("Password:");
-    User user = authService.Login(username, password);
+    User? user = authService.Login(username, password);
 
     if (user == null)
     {
@@ -50,7 +58,7 @@ void Register()
     string username = ConsoleKit.ReadText("Username (min 3 characters):");
     string name = ConsoleKit.ReadText("Full name:");
     string password = ConsoleKit.ReadText("Password (min 4 characters):");
-    User user = authService.Register(username, name, password);
+    User? user = authService.Register(username, name, password);
 
     if (user == null) ConsoleKit.Error("Invalid data or username already exists.");
     else ConsoleKit.Success("Customer created with ID: " + user.Id);
@@ -108,7 +116,7 @@ void BuyProduct(User customer)
     ShowProducts();
     int id = ConsoleKit.ReadInt("Product ID:", 1);
     int quantity = ConsoleKit.ReadInt("Quantity:", 1);
-    Order order = orderService.PlaceOrder(customer, id, quantity);
+    Order? order = orderService.PlaceOrder(customer, id, quantity);
 
     if (order == null) ConsoleKit.Error("Order failed: product not found, inactive or out of stock.");
     else ConsoleKit.Success($"Order #{order.Id} | Total: {order.TotalPrice:N0}");
@@ -150,7 +158,7 @@ void AddPhysical(User admin)
     int price = ConsoleKit.ReadInt("Base price:", 0);
     int shipping = ConsoleKit.ReadInt("Shipping cost:", 0);
     int stock = ConsoleKit.ReadInt("Stock:", 0);
-    Product product = productService.AddPhysical(admin, name, price, shipping, stock);
+    Product? product = productService.AddPhysical(admin, name, price, shipping, stock);
 
     if (product == null) ConsoleKit.Error("Could not add product.");
     else ConsoleKit.Success("Created physical product #" + product.Id);
@@ -161,7 +169,7 @@ void AddDigital(User admin)
     string name = ConsoleKit.ReadText("Product name:");
     int price = ConsoleKit.ReadInt("Base price:", 0);
     int discount = ConsoleKit.ReadInt("Discount percent:", 0, 100);
-    Product product = productService.AddDigital(admin, name, price, discount);
+    Product? product = productService.AddDigital(admin, name, price, discount);
 
     if (product == null) ConsoleKit.Error("Could not add product.");
     else ConsoleKit.Success("Created digital product #" + product.Id);

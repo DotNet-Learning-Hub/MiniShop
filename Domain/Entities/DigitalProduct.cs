@@ -4,8 +4,8 @@ public class DigitalProduct : Product
 {
     public int DiscountPercent { get; }
 
-    public DigitalProduct(int id, string name, int price, int discountPercent)
-        : base(id, name, price)
+    public DigitalProduct(int id, string name, int basePrice, int discountPercent)
+        : base(id, name, basePrice)
     {
         DiscountPercent = discountPercent;
     }

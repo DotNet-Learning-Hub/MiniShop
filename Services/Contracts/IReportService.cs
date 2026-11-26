@@ -4,5 +4,5 @@ namespace MiniShop.Services.Contracts;
 
 public interface IReportService
 {
-    long GetTotalSales(User admin);
+    long GetTotalSales(User? admin);
 }

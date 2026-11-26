@@ -5,8 +5,8 @@ public class PhysicalProduct : Product
     public int ShippingCost { get; }
     public int Stock { get; private set; }
 
-    public PhysicalProduct(int id, string name, int price, int shippingCost, int stock)
-        : base(id, name, price)
+    public PhysicalProduct(int id, string name, int basePrice, int shippingCost, int stock)
+        : base(id, name, basePrice)
     {
         ShippingCost = shippingCost;
         Stock = stock;
